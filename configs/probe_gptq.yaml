@@ -1,0 +1,28 @@
+# Preliminary probe: uniform-weight GPTQ on the same calibration set.
+# drift_correction is off for cost; this is a documented deviation from full GPTAQ
+# and it is what the probe-swap analysis (notebook 08) exists to characterise.
+
+bits: 4
+group_size: 128
+sym: false
+damp_percent: 0.01
+act_order: false
+true_sequential: false
+blocksize: 128
+working_dtype: float32
+
+hessian_dtype: float32
+min_tokens_per_layer: 256
+
+asym: false
+drift_correction: false
+
+mse_clip: false
+n_clip_grid: 20
+
+exclude_name_patterns: ["lm_head"]
+min_in_features: 16
+
+diag_max_dim: 2560
+diag_topk: 64
+diag_every_n: 2

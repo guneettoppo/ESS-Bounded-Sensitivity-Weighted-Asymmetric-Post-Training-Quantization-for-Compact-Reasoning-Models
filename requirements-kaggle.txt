@@ -1,0 +1,14 @@
+# Kaggle T4 environment (verified working combination as of the library's tests).
+# Kaggle preinstalls torch/transformers; these pins are for reproducibility records.
+# Install:  !pip -q install -r requirements-kaggle.txt
+
+torch==2.15.0
+transformers==4.56.2
+datasets==4.3.0
+tokenizers==0.22.1
+accelerate==1.11.0
+numpy>=1.26
+scipy>=1.11
+pyyaml>=6.0
+safetensors>=0.4.3
+sentencepiece>=0.1.99

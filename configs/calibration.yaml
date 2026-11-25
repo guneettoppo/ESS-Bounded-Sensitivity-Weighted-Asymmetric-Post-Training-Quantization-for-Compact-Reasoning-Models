@@ -1,0 +1,33 @@
+# Calibration corpus (Milestone 1)
+# Pilot scale from v2 §5.1: 16-32 sequences. The 128-sequence / 262k-token corpus of
+# v1 §2.2 is the later target, not a prerequisite for the proxy gate.
+#
+# Sized so the token count clears ~2x the model's largest input dimension
+# (d_in = 8960 for down_proj in the 1.5B model). Notebook 02 asserts this: below ~1x,
+# the Hessian is structurally rank-deficient and the ridge dominates the solve.
+
+n_reasoning: 20          # self-generated CoT traces from training-split prompts
+n_general: 7             # C4 / WikiText anchors -> ~74/26 mix at these settings
+n_holdout: 8             # disjoint prompts, never used for calibration
+max_seq_len: 2048
+seed: 0
+min_trace_tokens: 64
+
+# prompt sources (training splits only)
+prompt_dataset: openai/gsm8k
+prompt_config: main
+prompt_split: train
+prompt_field: question
+
+general_dataset: wikitext
+general_config: wikitext-2-raw-v1
+general_split: train
+general_field: text
+
+# generation: deterministic greedy for the primary corpus
+gen_max_new_tokens: 1280
+gen_do_sample: false
+gen_temperature: 0.6
+gen_top_p: 0.95
+
+ngram_leak_n: 13

@@ -1,0 +1,14 @@
+# local test environment (torch CPU + numpy + scipy + pyyaml, ~700 MB)
+.venv/
+
+# notebook execution artifacts
+artifacts/
+*.zip
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# kaggle
+/kaggle/
