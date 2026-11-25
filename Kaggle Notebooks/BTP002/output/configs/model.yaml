@@ -1,0 +1,11 @@
+# EB-SW-GPTAQ — model under test
+# Pinned so notebook 00 can record an exact reproduction manifest.
+model_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+revision: null            # set to a commit sha once you have one you trust
+dtype: float16            # T4 has no native BF16 tensor cores
+fp32_lm_head: true        # guards against FP16 overflow in the 152k-way projection
+device: cuda
+attn_implementation: sdpa
+trust_remote_code: false
+max_seq_len: 2048
+exclude_name_patterns: ["lm_head"]

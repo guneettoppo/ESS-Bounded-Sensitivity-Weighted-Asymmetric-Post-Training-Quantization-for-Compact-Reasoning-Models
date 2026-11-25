@@ -1,0 +1,27 @@
+# Preliminary probe: round-to-nearest (no data, no Hessian).
+# The probe only has to be cheap and fixed, not good (v2 §4.1).
+
+bits: 4
+group_size: 128
+sym: false
+damp_percent: 0.01
+act_order: false
+true_sequential: false
+blocksize: 128
+working_dtype: float32
+
+hessian_dtype: float32
+min_tokens_per_layer: 256
+
+asym: false
+drift_correction: false
+
+mse_clip: false
+n_clip_grid: 20
+
+exclude_name_patterns: ["lm_head"]
+min_in_features: 16
+
+diag_max_dim: 2560
+diag_topk: 64
+diag_every_n: 2

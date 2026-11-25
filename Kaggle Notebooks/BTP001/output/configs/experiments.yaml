@@ -1,0 +1,80 @@
+# The decisive experiment matrix (notebook 06-08).
+#
+# Every variant uses the identical calibration corpus, quantizer hyper-parameters and
+# bit-width. The ONLY thing that changes is the weight vector -- which is the point
+# of the specificity control (hypothesis H4).
+
+baseline: uniform
+
+variants:
+  uniform:
+    signal: none
+    note: "uniform GPTAQ: w_t = 1. Primary baseline."
+
+  jsd:
+    signal: jsd
+    probe: rtn
+    clip_quantile: 0.99
+    standardize: true
+    normalize: global
+    beta: 1.0
+    ess_floor: null
+    sink_mask: true
+    note: "proposed signal, modest fixed beta=1.0 (v2 §4.2)."
+
+  jsd_ess50:
+    signal: jsd
+    probe: rtn
+    clip_quantile: 0.99
+    standardize: true
+    normalize: global
+    beta: null
+    ess_floor: 0.50
+    sink_mask: true
+    note: "ESS-bounded variant, secondary control (v1 Theorem 1)."
+
+  entropy:
+    signal: entropy
+    probe: none
+    clip_quantile: 0.99
+    standardize: true
+    normalize: global
+    beta: 1.0
+    ess_floor: null
+    sink_mask: true
+    note: "open-loop secondary signal: is a quantized probe even necessary?"
+
+  kl:
+    signal: kl
+    probe: rtn
+    clip_quantile: 0.99
+    standardize: true
+    normalize: global
+    beta: 1.0
+    ess_floor: null
+    sink_mask: true
+    note: "unbounded forward KL, heavy-tailed negative control (v2 §4.1)."
+
+  random:
+    signal: random
+    probe: jsd
+    note: "same weight distribution, no alignment. Controls for nonuniform weighting."
+
+  shuffled:
+    signal: jsd
+    probe: rtn
+    shuffle_within_sequence: true
+    beta: 1.0
+    note: "preserves within-sequence weight distribution, breaks position alignment."
+
+probe_swap:
+  probes: [rtn, gptq]
+  metrics: [spearman, kendall, topk_overlap]
+
+gates:
+  signal:
+    rule: "high-JSD vs low-JSD subspace overlap must differ from the matched random control in a majority of layers"
+  specificity:
+    rule: "jsd must beat uniform, random and shuffled on held-out teacher-forced KL, with paired 95% CI excluding zero"
+  robustness:
+    rule: "the ranking must survive swapping the RTN probe for a GPTQ probe"
